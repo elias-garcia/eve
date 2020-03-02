@@ -92,15 +92,8 @@ class Validator(Validator):
         .. versionadded:: 0.6
         """
         if unique:
-            schema = self.schema
-            attribute_path = self.document_path + (field,)
-            temp_path = [attribute_path[0]]
-
-            for i, path in enumerate(attribute_path[:-1]):
-                schema = schema[path]
-                if schema["type"] != "list":
-                    temp_path.append(attribute_path[i + 1])
-
+            attribute_path = list(self.document_path + (field,))
+            temp_path = [x for x in attribute_path if not isinstance(x, int)]
             final_path = ".".join(temp_path)
 
             query[final_path] = value
